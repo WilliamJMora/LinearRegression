@@ -47,10 +47,10 @@ Before using the dataset, it is imperative to remove “dirty” data to ensure 
 - Fixing spelling mistakes
 - Translating languages
 
-There are more methods of cleaning data, but these are some of the most common techniques. Let’s apply these techniques to the housing dataset.
+There are more methods of cleaning data, but these are some of the most common techniques. Let's apply these techniques to the housing dataset.
 
-Cleaning data can be done in various mediums. First, the data will be cleaned in power query just to see how it can be used and completed in Microsoft Excel. Then, the same process will be shown using Pandas in Python. SQL is another tool that can be used. Choosing the platform to clean data can depend on multiple variables, such as how the data is stored and just personal preference.
+Cleaning data can be done in various mediums. First, the data is cleaned in power query just to show how it can be used and completed in Microsoft Excel. Then, the same process will be shown using Pandas in Python. SQL is another tool that can be used. Choosing the platform to clean data can depend on multiple variables, such as how the data is stored, the size of the dataset (this is where Excel is limited compared to SQL, Pandas, etc.), and just personal preference.
 
-To start, get the data in Microsoft Excel after downloading the CSV file from Kaggle through Power Query (located in the Data tab).
+To start, let's get the data in Microsoft Excel after downloading the CSV file from Kaggle through Power Query (located in the Data tab).
 
 
