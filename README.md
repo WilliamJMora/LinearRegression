@@ -234,6 +234,7 @@ Next, let's create the zip code dummy variables. There are four zip codes (11354
 ```
 # creating dummy variables
 subset_data = pd.get_dummies(subset_data, columns=['Zip_Code'], dtype='int')
+
 # removing categorical data
 subset_data.drop(['City', 'State', 'County'], axis=1, inplace=True)
 ```
@@ -288,4 +289,119 @@ Before running multiple linear regression, let's look at how each independent va
 
 The math behind the method can be found here:
 https://www.varsitytutors.com/hotmath/hotmath_help/topics/line-of-best-fit
+
+```
+# simple linear regression
+x1 = subset_data['Beds']
+x2 = subset_data['Baths']
+x3 = subset_data['Living_Space']
+x4 = subset_data['Zip_Code_Population']
+x5 = subset_data['Zip_Code_Density']
+x6 = subset_data['Median_Household_Income']
+y_axis = subset_data['Price']
+plt.title("Price vs. Beds")
+plt.xlabel("Beds")
+plt.ylabel("Price")
+
+x, y = np.polyfit(x1, y_axis, 1)
+plt.scatter(x1, y_axis)
+plt.plot(x1, x*x1 + y)
+plt.show()
+```
+
+### Flushing Graphs ###
+
+By looking at the graphs, it looks like beds, baths, and living space could have the strongest relations to price. This means that they may be kept for a linear regression equation.
+
+### 5. Correlation coefficients and heat map with Seaborn
+
+The correlation coefficient measures the strength of linear correlation between two variables. Using Pandas, let's find the correlation coefficients amongst all of the independent variables in the Flushing housing dataset.
+
+```
+# correlation coefficients
+correlation = subset_data.corr(method='pearson')
+```
+
+```
+                            Price      Beds  ...  Zip_Code_11358  Zip_Code_11367
+Price                    1.000000  0.896970  ...        0.421833       -0.260449
+Beds                     0.896970  1.000000  ...        0.259161       -0.127014
+Baths                    0.964373  0.917656  ...        0.398541       -0.206056
+Living_Space             0.777290  0.644620  ...        0.692711       -0.170555
+Zip_Code_Population      0.069691  0.189211  ...       -0.457154       -0.410863
+Zip_Code_Density         0.127505  0.266648  ...       -0.306482       -0.230225
+Median_Household_Income  0.114257  0.048143  ...        0.705415        0.572746
+Zip_Code_11354          -0.196924 -0.276202  ...       -0.454257       -0.572478
+Zip_Code_11355           0.201253  0.331150  ...       -0.111111       -0.140028
+Zip_Code_11358           0.421833  0.259161  ...        1.000000       -0.140028
+Zip_Code_11367          -0.260449 -0.127014  ...       -0.140028        1.000000
+```
+
+The correlation coefficient ranges from -1 to 1. The closer the number is to -1 or 1, the stronger the correlation between the two variables.
+
+This information can be displayed in a Seaborn heat map.
+
+```
+# heat map of coefficients
+sb.heatmap(correlation, annot=True)
+plt.show()
+```
+
+### Heat Map ###
+
+By looking at the heat map, we can see that there are some strong correlations, including:
+- Zip code density and zip code 11355
+- Zip code density and zip code population
+- Beds and baths
+
+This means that some of these variables could be removed from our dataset to reduce multicollinearity. Multicollinearity is the strength of correlation between two independent variables. Stronger multicollinearity can reduce the accuracy of the model. More observation is needed before removing any variables.
+
+### 6. Multiple linear regression and ordinary least squares with StatsModels
+
+By using ordinary least squares, we can choose which variables are suitable for the model. Let's run OLS on the Flushing housing dataset.
+
+```
+# ordinary least squares
+ols = sm.ols(formula='Price ~ Beds + Baths + Living_Space + Zip_Code_Population + Zip_Code_Density + Median_Household_Income', data=subset_data)
+model = ols.fit()
+```
+
+```
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  Price   R-squared:                       0.943
+Model:                            OLS   Adj. R-squared:                  0.933
+Method:                 Least Squares   F-statistic:                     91.02
+Date:                Sat, 16 Mar 2024   Prob (F-statistic):           4.28e-19
+Time:                        18:44:56   Log-Likelihood:                -531.08
+No. Observations:                  40   AIC:                             1076.
+Df Residuals:                      33   BIC:                             1088.
+Df Model:                           6                                         
+Covariance Type:            nonrobust                                         
+===========================================================================================
+                              coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------------------
+Intercept               -1.185e+07   4.66e+06     -2.542      0.016   -2.13e+07   -2.36e+06
+Beds                     1.708e+04    3.3e+04      0.518      0.608      -5e+04    8.41e+04
+Baths                    3.646e+05   6.41e+04      5.689      0.000    2.34e+05    4.95e+05
+Living_Space             -165.5349     99.661     -1.661      0.106    -368.296      37.226
+Zip_Code_Population       196.6046     75.920      2.590      0.014      42.145     351.064
+Zip_Code_Density         -566.9071    218.555     -2.594      0.014   -1011.560    -122.254
+Median_Household_Income    83.5432     32.458      2.574      0.015      17.507     149.580
+==============================================================================
+Omnibus:                        1.429   Durbin-Watson:                   2.120
+Prob(Omnibus):                  0.489   Jarque-Bera (JB):                0.854
+Skew:                           0.353   Prob(JB):                        0.652
+Kurtosis:                       3.114   Cond. No.                     1.97e+07
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 1.97e+07. This might indicate that there are
+strong multicollinearity or other numerical problems.
+```
+
+The null hypothesis states that there is no substantial relationship between variables. By reading the statistics above, we can see if we can reject the null hypothesis.
+
+The first value to look at is adjusted R-squared. Adjusted R-squared ranges from 0 to 1 with a higher number indicating that the model is possibly a good fit for the data. However, the number does not give insight into whether it is good for prediction. At, .933, 93.3% of the variation in price can be explained by the independent variables. The model above is a good fit for the data.
 
