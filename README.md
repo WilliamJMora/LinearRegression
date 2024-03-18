@@ -49,63 +49,63 @@ There are more methods of cleaning data, but these are some of the most common t
 
 Cleaning data can be done in various mediums. First, the data is cleaned in power query just to show how it can be used and completed in Microsoft Excel. Then, the same process will be shown using Pandas in Python. SQL is another tool that can be used. Choosing the platform to clean data can depend on multiple variables, such as how the data is stored, the size of the dataset (this is where Excel is limited compared to SQL, Pandas, etc.), and just personal preference.
 
-To start, let's get the data in Microsoft Excel after downloading the CSV file from Kaggle through Power Query (located in the **Data** tab).
+To start, let's get the data in Microsoft Excel after downloading the CSV file from Kaggle through Power Query (located in the *Data* tab).
 
-### Power Query 1
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%201.png>
 
-Let's select **Get Data (Power Query)**.
+Let's select *Get Data (Power Query)*.
 
-### Power Query 2
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%202.png>
 
-Data can be imported from various sources. Since the dataset is in a CSV file, let's select **Text/CSV**.
+Data can be imported from various sources. Since the dataset is in a CSV file, let's select *Text/CSV*.
 
-### Power Query 3
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%203.png>
 
-After that, the data needs to be cleaned before loading it into Excel, so **Transform Data** is selected.
+After that, the data needs to be cleaned before loading it into Excel, so *Transform Data* is selected.
 
-### Power Query 4
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%204.png>
 
 This opens up Power Query and displays the data. On the right, there is a running log of all the changes made. This is how to undo a change.
 
-### Power Query 5
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%205.png>
 
 First, let’s handle missing data. When sorting by ascending median household income, two null values are uncovered.
 
-### Power Query 6
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%206.png>
 
-### Power Query 7
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%207.png>
 
-There are different ways of handling missing data. This includes replacing it with sensible data, such as the mean, and removing/filtering out the data. Since this dataset is large, removing two entries will not have any major repercussions for the end results. In the home tab, let’s select **Remove rows**, **Remove top rows**, then enter 2 to remove the unwanted data. 
+There are different ways of handling missing data. This includes replacing it with sensible data, such as the mean, and removing/filtering out the data. Since this dataset is large, removing two entries will not have any major repercussions for the end results. In the home tab, let’s select *Remove rows*, *Remove top rows*, then enter 2 to remove the unwanted data. 
 
-### Power Query 8
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%208.png>
 
-Now, let’s remove duplicate data. This is done simply by selecting **Remove rows** and **Remove duplicates**.
+Now, let’s remove duplicate data. This is done simply by selecting *Remove rows* and *Remove duplicates*.
 
-### Power Query 9
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%209.png>
 
 Next, let’s get rid of irrelevant data. It is important to be sure that the data that is being removed is not important so the analysis can be accurate. Removing important data will have unwanted effects on prediction. Common sense is critical in data analysis.
 
-The columns of **Zip Code**, **City**, **State**, and **County** should be kept as they have geographical importance to the data. However, the individual address of each house is not important. Also, latitude and longitude might have effects on the data, but there are better methods to handling these points. Therefore, **Address**, **Latitude**, and **Longitude** can be removed. A column can be removed by selecting it and then choosing Remove columns. 
+The columns of *Zip Code*, *City*, *State*, and *County* should be kept as they have geographical importance to the data. However, the individual address of each house is not important. Also, latitude and longitude might have effects on the data, but there are better methods to handling these points. Therefore, *Address*, *Latitude*, and *Longitude* can be removed. A column can be removed by selecting it and then choosing Remove columns. 
 
-### Power Query 10
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%2010.png>
 
-The remaining data, **Beds**, **Baths**, **Living space**, **Zip code population**, **Zip code density**, and **Median household income**, can affect prices, so these columns should be kept.
+The remaining data, *Beds**, *Baths*, *Living space*, *Zip code population*, *Zip code density*, and *Median household income*, can affect prices, so these columns should be kept.
 
-Looking at the data types, only **Zip code** needs to be changed. Zip codes represent geographical areas and the computer will interpret them as numbers since they consist of digits and higher zip codes will be treated as if they are worth more. Therefore, let's change **Zip Code** from a numberical data type to a text data type.
+Looking at the data types, only *Zip code* needs to be changed. Zip codes represent geographical areas and the computer will interpret them as numbers since they consist of digits and higher zip codes will be treated as if they are worth more. Therefore, let's change **Zip Code** from a numberical data type to a text data type.
 
-### Power Query 11
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%2011.png>
 
-### Power Query 12
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%2012.png>
 
-### Power Query 13
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%2013.png>
 
 Let’s change the column names that have more than one word by putting a line between the words (Zip Code to Zip_Code). This is important for when it is time to access columns in Pandas. The names can be changed by double clicking the column names.
 
-### Power Query 14
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%2014.png>
 
-Let's load the data into an Excel table by clicking **Close & Load**.
+Let's load the data into an Excel table by clicking *Close & Load*.
 
-### Power Query 15
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Power%20Query%2015.png>
 
 The dataset can be saved as an Excel spreadsheet or a CSV file and imported into the project (delete any other sheets, such as Sheet1).
 
@@ -136,7 +136,7 @@ data.dropna()
 
 ### 3. Categorical data and dummy variables
 
-As aforementioned, we changed **Zip_Code** to a text data type since it is categorical data. Another example would be the four cardinal directions (North, South, East, and West). If we just assigned numbers one through four to them, the directions with higher numbers would be worth more value, but in reality, they are all worth the same. Let's create four dummy variables.
+As aforementioned, we changed *Zip_Code* to a text data type since it is categorical data. Another example would be the four cardinal directions (North, South, East, and West). If we just assigned numbers one through four to them, the directions with higher numbers would be worth more value, but in reality, they are all worth the same. Let's create four dummy variables.
 
 Old Table
 
@@ -309,7 +309,12 @@ plt.plot(x1, x*x1 + y)
 plt.show()
 ```
 
-### Flushing Graphs ###
+<img width=150 src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Figure_1_Flushing.png>
+<img width=150 src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Figure_2_Flushing.png>
+<img width=150 src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Figure_3_Flushing.png>
+<img width=150 src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Figure_4_Flushing.png>
+<img width=150 src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Figure_5_Flushing.png>
+<img width=150 src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Figure_6_Flushing.png>
 
 By looking at the graphs, it looks like beds, baths, and living space could have the strongest relations to price. This will not have an affect on multiple linear regression since the independent variables affect each other as well, but it is nice to visualize.
 
@@ -346,7 +351,7 @@ sb.heatmap(correlation, annot=True)
 plt.show()
 ```
 
-### Heat Map ###
+<img src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Heat_Map_Flushing.png>
 
 By looking at the heat map, we can see that there are some strong correlations, including:
 - Zip code density and zip code 11355
@@ -404,11 +409,11 @@ First, the adjusted R-squared value is .933, which means that 93.3% of the varia
 
 Prob(F-statistic) measures if the null hypothesis is accurate. The number is very small, so the null hypothesis is likely not accurate.
 
-P>|t| are the p values. Four of the independent variables have a p value < .05, which means they are statistically significant. The other variables are high, especially **Beds** and **Median_Household_Income**.
+P>|t| are the p values. Four of the independent variables have a p value < .05, which means they are statistically significant. The other variables are high, especially *Beds* and *Median_Household_Income*.
 
 With this data, we can say that the independent variables have a relationship with the dependent variable.
 
-Let's remove **Beds** and **Median_Holsehold_Income**.
+Let's remove *Beds* and *Median_Holsehold_Income*.
 
 ```
                             OLS Regression Results                            
