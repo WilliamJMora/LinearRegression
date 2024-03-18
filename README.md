@@ -10,6 +10,7 @@ In this project, linear regression is applied to an American housing dataset to 
 4.	Simple linear regression
 5.	Correlation coefficients and heat maps with Seaborn
 6.	Multiple linear regression and ordinary least squares with StatsModels
+7.	Another example
 
 ### 1. Housing dataset with Kaggle
 
@@ -399,10 +400,81 @@ Kurtosis:                       3.114   Cond. No.                     5.80e+21
 
 Let's analyze the data to see if we can reject the null hypothesis, or reject that there is no relationship between the variables.
 
-First, the adjusted R-squared value is .933, which means that 93.3% of the variation of the price can be explained by the independent variables. It also means that the model is a good fit for the data (but it does not mean that it is good at predicting future values). 
+First, the adjusted R-squared value is .933, which means that 93.3% of the variation of the price can be explained by the independent variables. It also means that the model is a good fit for the data (but it does not necessarily mean that it is good at predicting future values). 
 
 Prob(F-statistic) measures if the null hypothesis is accurate. The number is very small, so the null hypothesis is likely not accurate.
 
-P>|t| are the p values. 
+P>|t| are the p values. Four of the independent variables have a p value < .05, which means they are statistically significant. The other variables are high, especially **Beds** and **Median_Household_Income**.
 
-With this data, we can say that the independent variables have a relationship with the dependent variable. Omnibus, skew, and kurtosis test to see if the residuals are normally distributed, but this does not indicate anything about the accuracy of the model.
+With this data, we can say that the independent variables have a relationship with the dependent variable.
+
+Let's remove **Beds** and **Median_Holsehold_Income**.
+
+```
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  Price   R-squared:                       0.943
+Model:                            OLS   Adj. R-squared:                  0.934
+Method:                 Least Squares   F-statistic:                     111.6
+Date:                Mon, 18 Mar 2024   Prob (F-statistic):           4.36e-20
+Time:                        16:17:09   Log-Likelihood:                -531.25
+No. Observations:                  40   AIC:                             1074.
+Df Residuals:                      34   BIC:                             1085.
+Df Model:                           5                                         
+Covariance Type:            nonrobust                                         
+=======================================================================================
+                          coef    std err          t      P>|t|      [0.025      0.975]
+---------------------------------------------------------------------------------------
+Intercept            1.002e+04   6.93e+04      0.145      0.886   -1.31e+05    1.51e+05
+Baths                3.932e+05   3.22e+04     12.201      0.000    3.28e+05    4.59e+05
+Living_Space         -184.9915     91.323     -2.026      0.051    -370.582       0.599
+Zip_Code_Population    14.0670      6.700      2.100      0.043       0.451      27.683
+Zip_Code_Density      -52.2377     33.012     -1.582      0.123    -119.326      14.850
+Zip_Code_11354      -5369.8812   8.24e+04     -0.065      0.948   -1.73e+05    1.62e+05
+Zip_Code_11355        3.07e+04   5.73e+04      0.536      0.596   -8.57e+04    1.47e+05
+Zip_Code_11358       3.637e+05   1.38e+05      2.626      0.013    8.22e+04    6.45e+05
+==============================================================================
+Omnibus:                        3.241   Durbin-Watson:                   2.135
+Prob(Omnibus):                  0.198   Jarque-Bera (JB):                2.085
+Skew:                           0.498   Prob(JB):                        0.353
+Kurtosis:                       3.510   Cond. No.                     7.27e+20
+==============================================================================
+```
+
+This time, we only have two independent variables with a p value greater than .05. Also, the adjusted R-squared value is the same. Again, if we are predicting future housing prices, removal of variables is not needed.
+
+### 7. Another example
+
+Here is an example using Philadelphia housing.
+
+```
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                  Price   R-squared:                       0.565
+Model:                            OLS   Adj. R-squared:                  0.561
+Method:                 Least Squares   F-statistic:                     163.6
+Date:                Mon, 18 Mar 2024   Prob (F-statistic):          4.89e-133
+Time:                        16:22:03   Log-Likelihood:                -10409.
+No. Observations:                 764   AIC:                         2.083e+04
+Df Residuals:                     757   BIC:                         2.086e+04
+Df Model:                           6                                         
+Covariance Type:            nonrobust                                         
+===========================================================================================
+                              coef    std err          t      P>|t|      [0.025      0.975]
+-------------------------------------------------------------------------------------------
+Intercept               -4.217e+05   4.72e+04     -8.927      0.000   -5.14e+05   -3.29e+05
+Beds                     2.461e+04   9708.307      2.535      0.011    5549.873    4.37e+04
+Baths                    1.403e+05   9078.494     15.455      0.000    1.22e+05    1.58e+05
+Living_Space                5.2138      2.703      1.929      0.054      -0.093      10.521
+Zip_Code_Population        -1.3607      0.543     -2.505      0.012      -2.427      -0.294
+Zip_Code_Density           22.8764      2.817      8.122      0.000      17.347      28.406
+Median_Household_Income     3.5682      0.277     12.889      0.000       3.025       4.112
+==============================================================================
+Omnibus:                      777.185   Durbin-Watson:                   1.670
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):            58197.348
+Skew:                           4.531   Prob(JB):                         0.00
+Kurtosis:                      44.786   Cond. No.                     6.47e+05
+==============================================================================
+```
+
+Looking at these results, we can conclude that the model would not be good with making predictions due to the moderate R-squared value, but the independent variables do have a strong effect on the dependent variable.
