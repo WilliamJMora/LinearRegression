@@ -310,7 +310,7 @@ plt.show()
 ```
 
 <img width=150 src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Figure_1_Flushing.png>
-<img width=150 src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Figure_2_Flushing.png>
+<img width=150 src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Figure_2_Fushing.png>
 <img width=150 src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Figure_3_Flushing.png>
 <img width=150 src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Figure_4_Flushing.png>
 <img width=150 src=https://github.com/WilliamJMora/LinearRegression/blob/main/Pictures/Figure_5_Flushing.png>
