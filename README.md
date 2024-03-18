@@ -10,9 +10,6 @@ In this project, linear regression is applied to an American housing dataset to 
 4.	Simple linear regression
 5.	Correlation coefficients and heat maps with Seaborn
 6.	Multiple linear regression and ordinary least squares with StatsModels
-7.	Variation inflation factor
-8.	Summary of analysis
-
 
 ### 1. Housing dataset with Kaggle
 
@@ -237,6 +234,8 @@ subset_data = pd.get_dummies(subset_data, columns=['Zip_Code'], dtype='int')
 
 # removing categorical data
 subset_data.drop(['City', 'State', 'County'], axis=1, inplace=True)
+# removing dummy variable
+subset_data.drop(['Zip_Code_11367'], axis=1, inplace=True)
 ```
 
 ```
@@ -311,7 +310,7 @@ plt.show()
 
 ### Flushing Graphs ###
 
-By looking at the graphs, it looks like beds, baths, and living space could have the strongest relations to price. This means that they may be kept for a linear regression equation.
+By looking at the graphs, it looks like beds, baths, and living space could have the strongest relations to price. This will not have an affect on multiple linear regression since the independent variables affect each other as well, but it is nice to visualize.
 
 ### 5. Correlation coefficients and heat map with Seaborn
 
@@ -323,18 +322,17 @@ correlation = subset_data.corr(method='pearson')
 ```
 
 ```
-                            Price      Beds  ...  Zip_Code_11358  Zip_Code_11367
-Price                    1.000000  0.896970  ...        0.421833       -0.260449
-Beds                     0.896970  1.000000  ...        0.259161       -0.127014
-Baths                    0.964373  0.917656  ...        0.398541       -0.206056
-Living_Space             0.777290  0.644620  ...        0.692711       -0.170555
-Zip_Code_Population      0.069691  0.189211  ...       -0.457154       -0.410863
-Zip_Code_Density         0.127505  0.266648  ...       -0.306482       -0.230225
-Median_Household_Income  0.114257  0.048143  ...        0.705415        0.572746
-Zip_Code_11354          -0.196924 -0.276202  ...       -0.454257       -0.572478
-Zip_Code_11355           0.201253  0.331150  ...       -0.111111       -0.140028
-Zip_Code_11358           0.421833  0.259161  ...        1.000000       -0.140028
-Zip_Code_11367          -0.260449 -0.127014  ...       -0.140028        1.000000
+                            Price      Beds  ...  Zip_Code_11355  Zip_Code_11358
+Price                    1.000000  0.896970  ...        0.201253        0.421833
+Beds                     0.896970  1.000000  ...        0.331150        0.259161
+Baths                    0.964373  0.917656  ...        0.194161        0.398541
+Living_Space             0.777290  0.644620  ...       -0.050151        0.692711
+Zip_Code_Population      0.069691  0.189211  ...        0.861150       -0.457154
+Zip_Code_Density         0.127505  0.266648  ...        0.971398       -0.306482
+Median_Household_Income  0.114257  0.048143  ...       -0.387077        0.705415
+Zip_Code_11354          -0.196924 -0.276202  ...       -0.454257       -0.454257
+Zip_Code_11355           0.201253  0.331150  ...        1.000000       -0.111111
+Zip_Code_11358           0.421833  0.259161  ...       -0.111111        1.000000
 ```
 
 The correlation coefficient ranges from -1 to 1. The closer the number is to -1 or 1, the stronger the correlation between the two variables.
@@ -362,7 +360,7 @@ By using ordinary least squares, we can choose which variables are suitable for 
 
 ```
 # ordinary least squares
-ols = sm.ols(formula='Price ~ Beds + Baths + Living_Space + Zip_Code_Population + Zip_Code_Density + Median_Household_Income', data=subset_data)
+ols = sm.ols(formula='Price ~ Beds + Baths + Living_Space + Zip_Code_Population + Zip_Code_Density + Median_Household_Income + Zip_Code_11354 + Zip_Code_11355 + Zip_Code_11358', data=subset_data)
 model = ols.fit()
 ```
 
@@ -372,8 +370,8 @@ model = ols.fit()
 Dep. Variable:                  Price   R-squared:                       0.943
 Model:                            OLS   Adj. R-squared:                  0.933
 Method:                 Least Squares   F-statistic:                     91.02
-Date:                Sat, 16 Mar 2024   Prob (F-statistic):           4.28e-19
-Time:                        18:44:56   Log-Likelihood:                -531.08
+Date:                Mon, 18 Mar 2024   Prob (F-statistic):           4.28e-19
+Time:                        14:16:46   Log-Likelihood:                -531.08
 No. Observations:                  40   AIC:                             1076.
 Df Residuals:                      33   BIC:                             1088.
 Df Model:                           6                                         
@@ -381,27 +379,30 @@ Covariance Type:            nonrobust
 ===========================================================================================
                               coef    std err          t      P>|t|      [0.025      0.975]
 -------------------------------------------------------------------------------------------
-Intercept               -1.185e+07   4.66e+06     -2.542      0.016   -2.13e+07   -2.36e+06
+Intercept               -1.127e+04   4435.363     -2.542      0.016   -2.03e+04   -2249.713
 Beds                     1.708e+04    3.3e+04      0.518      0.608      -5e+04    8.41e+04
 Baths                    3.646e+05   6.41e+04      5.689      0.000    2.34e+05    4.95e+05
 Living_Space             -165.5349     99.661     -1.661      0.106    -368.296      37.226
-Zip_Code_Population       196.6046     75.920      2.590      0.014      42.145     351.064
-Zip_Code_Density         -566.9071    218.555     -2.594      0.014   -1011.560    -122.254
-Median_Household_Income    83.5432     32.458      2.574      0.015      17.507     149.580
+Zip_Code_Population        12.6963      7.124      1.782      0.084      -1.797      27.190
+Zip_Code_Density          -48.1032     30.966     -1.553      0.130    -111.103      14.897
+Median_Household_Income     0.3151      1.462      0.216      0.831      -2.659       3.289
+Zip_Code_11354           1.975e+04   7770.701      2.542      0.016    3941.479    3.56e+04
+Zip_Code_11355            4.67e+04   1.84e+04      2.542      0.016    9320.041    8.41e+04
+Zip_Code_11358           3.617e+05   1.42e+05      2.542      0.016    7.22e+04    6.51e+05
 ==============================================================================
 Omnibus:                        1.429   Durbin-Watson:                   2.120
 Prob(Omnibus):                  0.489   Jarque-Bera (JB):                0.854
 Skew:                           0.353   Prob(JB):                        0.652
-Kurtosis:                       3.114   Cond. No.                     1.97e+07
+Kurtosis:                       3.114   Cond. No.                     5.80e+21
 ==============================================================================
-
-Notes:
-[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-[2] The condition number is large, 1.97e+07. This might indicate that there are
-strong multicollinearity or other numerical problems.
 ```
 
-The null hypothesis states that there is no substantial relationship between variables. By reading the statistics above, we can see if we can reject the null hypothesis.
+Let's analyze the data to see if we can reject the null hypothesis, or reject that there is no relationship between the variables.
 
-The first value to look at is adjusted R-squared. Adjusted R-squared ranges from 0 to 1 with a higher number indicating that the model is possibly a good fit for the data. However, the number does not give insight into whether it is good for prediction. At, .933, 93.3% of the variation in price can be explained by the independent variables. The model above is a good fit for the data.
+First, the adjusted R-squared value is .933, which means that 93.3% of the variation of the price can be explained by the independent variables. It also means that the model is a good fit for the data (but it does not mean that it is good at predicting future values). 
 
+Prob(F-statistic) measures if the null hypothesis is accurate. The number is very small, so the null hypothesis is likely not accurate.
+
+P>|t| are the p values. 
+
+With this data, we can say that the independent variables have a relationship with the dependent variable. Omnibus, skew, and kurtosis test to see if the residuals are normally distributed, but this does not indicate anything about the accuracy of the model.
